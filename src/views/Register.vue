@@ -57,7 +57,13 @@
         methods: {
             onSubmit() {
                 console.log('subbmittedform')
-                this.$store.commit('registerStart')
+                this.$store.dispatch('register', {
+                    email: 'aasdadsadasdadaasadsadasd@wegtre.com',
+                    username: 'asdadsadsaadasdsadasd',
+                    password: '123123213'})
+                    .then(user => {
+                        console.log('successfully register user', user)
+                })
             }
         }
     }
