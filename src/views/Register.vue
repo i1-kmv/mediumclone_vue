@@ -12,23 +12,32 @@
                     VALIDATION ERRORS
                     <form @submit.prevent="onSubmit">
                         <fieldset class="form-group">
-                            <input type="text" class="form-control form-control-lg" plaseholder="Username"/>
+                            <input
+                                    class="form-control form-control-lg"
+                                    type="text"
+                                    placeholder="Username"
+                            />
                         </fieldset>
-                    </form>
-
-                    <form @submit.prevent="onSubmit">
                         <fieldset class="form-group">
-                            <input type="text" class="form-control form-control-lg" plaseholder="EMAIL"/>
+                            <input
+                                    class="form-control form-control-lg"
+                                    type="text"
+                                    placeholder="Email"
+                            />
                         </fieldset>
-                    </form>
-                    <button class="btn btn-lg btn-primary pull-xs-right">
-                        Sign Up
-                    </button>
-
-                    <form @submit.prevent="onSubmit">
                         <fieldset class="form-group">
-                            <input type="password" class="form-control form-control-lg" plaseholder="Password"/>
+                            <input
+                                    class="form-control form-control-lg"
+                                    type="password"
+                                    placeholder="Password"
+                            />
                         </fieldset>
+                        <button
+                                class="btn btn-lg btn-primary pull-xs-right"
+                                :disabled="isSubmitting"
+                        >
+                            Sign Up
+                        </button>
                     </form>
                 </div>
             </div>
@@ -40,9 +49,15 @@
 <script>
     export default {
         name: "McVRegister",
+        computed: {
+            isSubmitting() {
+                return this.$store.state.auth.isSubmitting
+            }
+        },
         methods: {
             onSubmit() {
-
+                console.log('subbmittedform')
+                this.$store.commit('registerStart')
             }
         }
     }
