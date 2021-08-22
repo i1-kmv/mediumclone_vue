@@ -53,7 +53,9 @@
 </template>
 
 <script>
-    import MvCValidationErrors from "../components/ValidationErrors";
+    import MvCValidationErrors from "../components/ValidationErrors"
+    import {actionTypes} from "../store/modules/auth";
+
     export default {
         name: "McVRegister",
         components: {
@@ -77,8 +79,7 @@
         },
         methods: {
             onSubmit() {
-                console.log('subbmittedform')
-                this.$store.dispatch('register', {
+                this.$store.dispatch(actionTypes.register, {
                     email: this.email,
                     username: this.username,
                     password: this.password})
