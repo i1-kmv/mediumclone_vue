@@ -4,24 +4,16 @@
             <div class="row">
                 <div class="col-md-6 offset-md-3 col-xs-12">
                     <h1 class="text-xs-center">
-                        Sign Up
+                        Sign In
                     </h1>
                     <p class="text-xs-center">
-                        <router-link :to="{name: 'login'}">Need an account</router-link>
+                        <router-link :to="{name: 'register'}">Have an account</router-link>
                     </p>
                     <MvCValidationErrors
                             v-if="validationErrors"
                             :validation-errors="validationErrors"
                     />
                     <form @submit.prevent="onSubmit">
-                        <fieldset class="form-group">
-                            <input
-                                    class="form-control form-control-lg"
-                                    type="text"
-                                    placeholder="Username"
-                                    v-model="username"
-                            />
-                        </fieldset>
                         <fieldset class="form-group">
                             <input
                                     class="form-control form-control-lg"
@@ -42,7 +34,7 @@
                                 class="btn btn-lg btn-primary pull-xs-right"
                                 :disabled="isSubmitting"
                         >
-                            Sign Up
+                            Sign In
                         </button>
                     </form>
                 </div>
@@ -54,18 +46,17 @@
 
 <script>
     import MvCValidationErrors from "../components/ValidationErrors"
-    import {actionTypes} from "../store/modules/auth";
+    import {actionTypes} from "../store/modules/auth"
 
     export default {
-        name: "McVRegister",
+        name: "McVLogin",
         components: {
             MvCValidationErrors
         },
-        data () {
-            return{
+        data() {
+            return {
                 email: '',
                 password: '',
-                username: ''
             }
 
         },
@@ -81,12 +72,11 @@
             onSubmit() {
                 this.$store.dispatch(actionTypes.login, {
                     email: this.email,
-                    username: this.username,
-                    password: this.password})
-                    .then(user => {
-                        console.log('successfully register user', user)
-                        this.$router.push({name:'home'})
+                    password: this.password
                 })
+                    .then(() => {
+                        this.$router.push({name: 'home'})
+                    })
             }
         }
     }
