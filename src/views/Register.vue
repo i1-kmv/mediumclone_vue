@@ -79,7 +79,7 @@
         },
         methods: {
             onSubmit() {
-                this.$store.dispatch(actionTypes.login, {
+                this.$store.dispatch(actionTypes.register, {
                     email: this.email,
                     username: this.username,
                     password: this.password})
