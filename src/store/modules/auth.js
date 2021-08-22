@@ -1,18 +1,25 @@
 import auth from '../../api/auth'
 
 const state = {
-    isSubmitting: false
+    isSubmitting: false,
+    currentUser: null,
+    validationErrors: null,
+    isLoggedIn: null
 }
 
 const mutations = {
     registerStart(state) {
         state.isSubmitting = true
+        state.validationErrors = null
     },
-    registerSucces(state) {
+    registerSucces(state, payload) {
         state.isSubmitting = false
+        state.currentUser = payload
+        state.isLoggedIn = true
     },
-    registerFailed(state) {
+    registerFailed(state, payload) {
         state.isSubmitting = false
+        state.validationErrors = payload
     }
 }
 
@@ -22,7 +29,6 @@ const actions = {
         return new Promise(resolve => {
             auth.register(credentials)
                 .then(response => {
-                    console.log(response)
                     context.commit('registerSucces', response.data.user)
                     resolve(response.data.user)
                 })
