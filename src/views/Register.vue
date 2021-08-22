@@ -9,7 +9,10 @@
                     <p class="text-xs-center">
                         <router-link :to="{name: 'login'}">Need an account</router-link>
                     </p>
-                    VALIDATION ERRORS
+                    <MvCValidationErrors
+                            v-if="validationErrors"
+                            :validation-errors="validationErrors"
+                    />
                     <form @submit.prevent="onSubmit">
                         <fieldset class="form-group">
                             <input
@@ -50,8 +53,12 @@
 </template>
 
 <script>
+    import MvCValidationErrors from "../components/ValidationErrors";
     export default {
         name: "McVRegister",
+        components: {
+            MvCValidationErrors
+        },
         data () {
             return{
                 email: '',
@@ -63,6 +70,9 @@
         computed: {
             isSubmitting() {
                 return this.$store.state.auth.isSubmitting
+            },
+            validationErrors() {
+                return this.$store.state.auth.validationErrors
             }
         },
         methods: {

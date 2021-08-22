@@ -1,15 +1,13 @@
 <template>
-  <div>
-    HelloWorld
-  </div>
+    <div>HelloWorld</div>
 </template>
 
 <script>
-export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
-}
+    export default {
+        name: "HelloWorld.vue"
+    }
 </script>
 
+<style scoped>
+
+</style>
