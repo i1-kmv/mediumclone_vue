@@ -34,7 +34,7 @@
                         </router-link>
                     </li>
                 </template>
-                <template v-if="!isAnonymous">
+                <template v-if="isAnonymous">
                     <li class="nav-item">
                         <router-link class="nav-link" :to="{name: 'login'}">
                             Sign in
@@ -63,15 +63,6 @@
                 isLoggedIn: getterTypes.isLoggedIn,
                 isAnonymous: getterTypes.isAnonymous
             }),
-            // currentUser() {
-            //     return this.$store.getters[getterTypes.currentUser]
-            // },
-            // isLoggedIn() {
-            //     return this.$store.getters[getterTypes.isLoggedIn]
-            // },
-            // isAnonymous() {
-            //     return this.$store.getters[getterTypes.isAnonymous]
-            // }
         }
     }
 </script>
