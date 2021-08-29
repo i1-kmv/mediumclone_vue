@@ -1,22 +1,22 @@
 <template>
     <ul class="pagination">
         <li
-                v-for="item in pages"
-                :key="item"
+                v-for="page in pages"
+                :key="page"
                 class="page-item"
-                :class="{active: currentPage === item}"
+                :class="{active: currentPage === page}"
         >
-            <router-link :to="{path: url, query: {page: item}}" class="page-link">
-                {{ item }}
+            <router-link :to="{path: url, query: {page: page}}" class="page-link">
+                {{ page }}
             </router-link>
         </li>
     </ul>
 </template>
 
 <script>
-    import {range} from '../helpers/utils'
+    import {range} from '@/helpers/utils'
     export default {
-        name: 'McVPagination',
+        name: 'McvPagination',
         props: {
             total: {
                 type: Number,

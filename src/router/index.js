@@ -1,17 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import GlobalFeed from '../views/GlobalFeed'
-import Register from "../views/Register"
-import Login from "../views/Login"
+
+import GlobalFeed from '@/views/GlobalFeed.vue'
+import Register from '@/views/Register.vue'
+import Login from '@/views/Login.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
-    {
-        path: '/',
-        name: 'globalFeed',
-        component: GlobalFeed
-    },
     {
         path: '/register',
         name: 'register',
@@ -23,12 +19,17 @@ const routes = [
         component: Login
     },
     {
+        path: '/',
+        name: 'globalFeed',
+        component: GlobalFeed
+    },
+    {
         path: '/feed',
         name: 'yourFeed',
         component: GlobalFeed
     },
     {
-        path: '/tags:slug',
+        path: '/tags/:slug',
         name: 'tag',
         component: GlobalFeed
     },
@@ -38,12 +39,12 @@ const routes = [
         component: GlobalFeed
     },
     {
-        path: '/articles/slug',
+        path: '/articles/:slug',
         name: 'article',
         component: GlobalFeed
     },
     {
-        path: '/articles/slug/edit',
+        path: '/articles/:slug/edit',
         name: 'editArticle',
         component: GlobalFeed
     },
@@ -58,8 +59,8 @@ const routes = [
         component: GlobalFeed
     },
     {
-        path: '/articles/slug/favourites',
-        name: 'userProfileFavourites',
+        path: '/profiles/:slug/favorites',
+        name: 'userProfileFavorites',
         component: GlobalFeed
     }
 ]

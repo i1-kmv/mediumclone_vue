@@ -4,7 +4,7 @@
         <div class="container page">
             <div class="row">
                 <div class="col-md-9">
-                    <feed :api-url="apiUrl"/>
+                    <mcv-feed :api-url="apiUrl"></mcv-feed>
                 </div>
                 <div class="col-md-3">
                     POPULAR TAGS
@@ -15,11 +15,12 @@
 </template>
 
 <script>
-    import Feed from "../components/Feed"
+    import McvFeed from '@/components/Feed.vue'
+
     export default {
-        name: "GlobalFeed.vue",
+        name: 'McvGlobalFeed',
         components: {
-            Feed
+            McvFeed
         },
         data() {
             return {
@@ -28,7 +29,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>

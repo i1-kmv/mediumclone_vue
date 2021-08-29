@@ -1,4 +1,4 @@
-import feedApi from '../../api/feed'
+import feedApi from '@/api/feed'
 
 const state = {
     data: null,
@@ -7,13 +7,13 @@ const state = {
 }
 
 export const mutationTypes = {
-    getFeedStart: '[feed] getFeedStart',
-    getFeedSuccess: '[feed] getFeedSuccess',
-    getFeedFailed: '[feed] getFeedFailed'
+    getFeedStart: '[feed] Get feed start',
+    getFeedSuccess: '[feed] Get feed success',
+    getFeedFailure: '[feed] Get feed failure'
 }
 
 export const actionTypes = {
-    getFeed: '[feed] getFeed'
+    getFeed: '[feed] Get feed'
 }
 
 const mutations = {
@@ -25,7 +25,7 @@ const mutations = {
         state.isLoading = false
         state.data = payload
     },
-    [mutationTypes.getFeedFailed](state) {
+    [mutationTypes.getFeedFailure](state) {
         state.isLoading = false
     }
 }
@@ -33,14 +33,15 @@ const mutations = {
 const actions = {
     [actionTypes.getFeed](context, {apiUrl}) {
         return new Promise(resolve => {
-            context.commit(mutationTypes.getFeedStart)
-            feedApi.getFeed(apiUrl)
+            context.commit(mutationTypes.getFeedStart, apiUrl)
+            feedApi
+                .getFeed(apiUrl)
                 .then(response => {
                     context.commit(mutationTypes.getFeedSuccess, response.data)
                     resolve(response.data)
                 })
                 .catch(() => {
-                    context.commit(mutationTypes.getFeedFailed)
+                    context.commit(mutationTypes.getFeedFailure)
                 })
         })
     }
@@ -51,3 +52,4 @@ export default {
     actions,
     mutations
 }
+

@@ -1,12 +1,12 @@
 import axios from 'axios'
-import {getItem} from "../helpers/persistanceStorage"
+import {getItem} from '@/helpers/persistanceStorage'
 
 axios.defaults.baseURL = 'https://conduit.productionready.io/api'
 
 axios.interceptors.request.use(config => {
     const token = getItem('accessToken')
-    const autorizationToken = token ? `Token ${token}` : ''
-    config.headers.Autorization = autorizationToken
+    const authorizisationToken = token ? `Token ${token}` : ''
+    config.headers.Authorization = authorizisationToken
     return config
 })
 
