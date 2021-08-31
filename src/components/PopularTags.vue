@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="isLoading">Loading...</div>
+        <mcv-loading v-if="isLoading"/>
         <div v-if="error">Something is broken</div>
 
         <div class="sidebar" v-if="popularTags">
@@ -21,11 +21,14 @@
 
 <script>
     import {mapState} from 'vuex'
-
+    import McvLoading from '@/components/Loading.vue'
     import {actionTypes} from '@/store/modules/popularTags'
 
     export default {
         name: 'McvPopularTags',
+        components: {
+            McvLoading
+        },
         computed: {
             ...mapState({
                 isLoading: state => state.popularTags.isLoading,
