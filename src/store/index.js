@@ -7,6 +7,7 @@ import feed from './modules/feed'
 import popularTags from './modules/popularTags'
 import article from './modules/article'
 import createArticle from "./modules/createArticle";
+import editArticle from "./modules/editArticle";
 
 Vue.use(Vuex)
 
@@ -22,6 +23,7 @@ export default new Vuex.Store({
     feed,
     popularTags,
     article,
-    createArticle
+    createArticle,
+    editArticle
   }
 })
