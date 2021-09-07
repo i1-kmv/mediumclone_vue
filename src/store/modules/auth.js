@@ -1,26 +1,40 @@
-import auth from '../../api/auth'
-import {setItem} from '../../helpers/persistanceStorage'
+import authApi from '@/api/auth'
+import {setItem} from '@/helpers/persistanceStorage'
 
 const state = {
     isSubmitting: false,
-    currentUser: null,
-    validationErrors: null,
     isLoggedIn: null,
-    isLoading: false
+    isLoading: false,
+    currentUser: null,
+    validationErrors: null
 }
 
 export const mutationTypes = {
-    registerStart: '[auth] registerStart',
-    registerSuccess:'[auth] registerSuccess',
-    registerFailed:'[auth] registerFailed',
+    registerStart: '[auth] Register start',
+    registerSuccess: '[auth] Register success',
+    registerFailure: '[auth] Register failure',
 
-    getCurrentUserStart: '[auth] getCurrentUserStart',
-    getCurrentUserSuccess:'[auth] getCurrentUserSuccess',
-    getCurrentUserFailed:'[auth] getCurrentUserFailed',
+    loginStart: '[auth] Login start',
+    loginSuccess: '[auth] Login success',
+    loginFailure: '[auth] Login failure',
 
-    loginStart: '[auth] loginStart',
-    loginSuccess:'[auth] loginSuccess',
-    loginFailed:'[auth] loginFailed'
+    getCurrentUserStart: '[auth] Get current user start',
+    getCurrentUserSuccess: '[auth] Get current user success',
+    getCurrentUserFailure: '[auth] Get current user failure',
+
+    updateCurrentUserStart: '[auth] Update current user start',
+    updateCurrentUserSuccess: '[auth] Update current user success',
+    updateCurrentUserFailure: '[auth] Update current user failure',
+
+    logout: '[auth] logout'
+}
+
+export const actionTypes = {
+    register: '[auth] Register',
+    login: '[auth] Login',
+    getCurrentUser: '[auth] Get current user',
+    updateCurrentUser: '[auth] Update current user',
+    logout: '[auth] logout'
 }
 
 export const getterTypes = {
@@ -34,7 +48,7 @@ const getters = {
         return state.currentUser
     },
     [getterTypes.isLoggedIn]: state => {
-       return Boolean(state.isLoggedIn)
+        return Boolean(state.isLoggedIn)
     },
     [getterTypes.isAnonymous]: state => {
         return state.isLoggedIn === false
@@ -48,100 +62,133 @@ const mutations = {
     },
     [mutationTypes.registerSuccess](state, payload) {
         state.isSubmitting = false
-        state.currentUser = payload
         state.isLoggedIn = true
+        state.currentUser = payload
     },
-    [mutationTypes.registerFailed](state, payload) {
+    [mutationTypes.registerFailure](state, payload) {
         state.isSubmitting = false
         state.validationErrors = payload
     },
-
     [mutationTypes.loginStart](state) {
         state.isSubmitting = true
         state.validationErrors = null
     },
     [mutationTypes.loginSuccess](state, payload) {
         state.isSubmitting = false
-        state.currentUser = payload
         state.isLoggedIn = true
+        state.currentUser = payload
     },
-    [mutationTypes.loginFailed](state, payload) {
+    [mutationTypes.loginFailure](state, payload) {
         state.isSubmitting = false
         state.validationErrors = payload
     },
-
     [mutationTypes.getCurrentUserStart](state) {
         state.isLoading = true
     },
     [mutationTypes.getCurrentUserSuccess](state, payload) {
         state.isLoading = false
-        state.currentUser = payload
         state.isLoggedIn = true
+        state.currentUser = payload
     },
-    [mutationTypes.getCurrentUserFailed](state) {
+    [mutationTypes.getCurrentUserFailure](state) {
         state.isLoading = false
         state.isLoggedIn = false
         state.currentUser = null
+    },
+    [mutationTypes.updateCurrentUserStart]() {},
+    [mutationTypes.updateCurrentUserSuccess](state, payload) {
+        state.currentUser = payload
+    },
+    [mutationTypes.updateCurrentUserFailure]() {},
+    [mutationTypes.logout]() {
+        state.currentUser = null
+        state.isLoggedIn = false
     }
-}
-
-export const actionTypes = {
-    register: '[auth] register',
-    login: '[auth] login',
-    getCurrentUser: '[auth] getCurrentUser',
 }
 
 const actions = {
     [actionTypes.register](context, credentials) {
-        context.commit(mutationTypes.registerStart)
         return new Promise(resolve => {
-            auth.register(credentials)
+            context.commit(mutationTypes.registerStart)
+            authApi
+                .register(credentials)
                 .then(response => {
                     context.commit(mutationTypes.registerSuccess, response.data.user)
                     setItem('accessToken', response.data.user.token)
                     resolve(response.data.user)
                 })
                 .catch(result => {
-                    console.log(result)
-                    context.commit(mutationTypes.registerFailed, result.response.data.errors)
+                    context.commit(
+                        mutationTypes.registerFailure,
+                        result.response.data.errors
+                    )
                 })
         })
     },
-
     [actionTypes.login](context, credentials) {
-        context.commit(mutationTypes.loginStart)
         return new Promise(resolve => {
-            auth.login(credentials)
+            context.commit(mutationTypes.loginStart)
+            authApi
+                .login(credentials)
                 .then(response => {
                     context.commit(mutationTypes.loginSuccess, response.data.user)
                     setItem('accessToken', response.data.user.token)
                     resolve(response.data.user)
                 })
                 .catch(result => {
-                    console.log(result)
-                    context.commit(mutationTypes.loginFailed, result.response.data.errors)
+                    context.commit(
+                        mutationTypes.loginFailure,
+                        result.response.data.errors
+                    )
                 })
         })
     },
-
     [actionTypes.getCurrentUser](context) {
-        context.commit(mutationTypes.getCurrentUserStart)
         return new Promise(resolve => {
-            auth.getCurrentUser()
+            context.commit(mutationTypes.getCurrentUserStart)
+            authApi
+                .getCurrentUser()
                 .then(response => {
-                    context.commit(mutationTypes.getCurrentUserSuccess, response.data.user)
+                    context.commit(
+                        mutationTypes.getCurrentUserSuccess,
+                        response.data.user
+                    )
                     resolve(response.data.user)
                 })
                 .catch(() => {
-                    context.commit(mutationTypes.getCurrentUserFailed)
+                    context.commit(mutationTypes.getCurrentUserFailure)
                 })
+        })
+    },
+    [actionTypes.updateCurrentUser](context, {currentUserInput}) {
+        return new Promise(resolve => {
+            context.commit(mutationTypes.updateCurrentUserStart)
+            authApi
+                .updateCurrentUser(currentUserInput)
+                .then(user => {
+                    context.commit(mutationTypes.updateCurrentUserSuccess, user)
+                    resolve(user)
+                })
+                .catch(result => {
+                    context.commit(
+                        mutationTypes.updateCurrentUserFailure,
+                        result.response.data.errors
+                    )
+                })
+        })
+    },
+    [actionTypes.logout](context) {
+        return new Promise(resolve => {
+            setItem('accessToken', '')
+            context.commit(mutationTypes.logout)
+            resolve()
         })
     }
 }
 
 export default {
     state,
-    mutations,
     actions,
+    mutations,
     getters
 }
