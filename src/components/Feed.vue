@@ -1,7 +1,8 @@
 <template>
     <div>
-        <mcv-loading v-if="isLoading"/>
-        <mcv-error-message v-if="error"/>
+        <mcv-loading v-if="isLoading" />
+        <mcv-error-message v-if="error" />
+
         <div v-if="feed">
             <div
                     class="article-preview"
@@ -25,7 +26,13 @@
                         </router-link>
                         <span class="date">{{ article.createdAt }}</span>
                     </div>
-                    <div class="pull-xs-right">ADD TO FAVORITES</div>
+                    <div class="pull-xs-right">
+                        <mcv-add-to-favorites
+                                :is-favorited="article.favorited"
+                                :article-slug="article.slug"
+                                :favorites-count="article.favoritesCount"
+                        ></mcv-add-to-favorites>
+                    </div>
                 </div>
                 <router-link
                         :to="{name: 'article', params: {slug: article.slug}}"
@@ -34,7 +41,7 @@
                     <h1>{{ article.title }}</h1>
                     <p>{{ article.description }}</p>
                     <span>Read more...</span>
-                    <mcv-tag-list :tags="article.tagList"/>
+                    <mcv-tag-list :tags="article.tagList" />
                 </router-link>
             </div>
             <mcv-pagination
@@ -50,12 +57,14 @@
 <script>
     import {mapState} from 'vuex'
     import {stringify, parseUrl} from 'query-string'
-    import McvLoading from '@/components/Loading.vue'
-    import McvErrorMessage from '@/components/ErrorMessage.vue'
+
     import {actionTypes} from '@/store/modules/feed'
     import McvPagination from '@/components/Pagination'
-    import McvTagList from '@/components/TagList'
     import {limit} from '@/helpers/vars'
+    import McvLoading from '@/components/Loading'
+    import McvErrorMessage from '@/components/ErrorMessage'
+    import McvTagList from '@/components/TagList'
+    import McvAddToFavorites from '@/components/AddToFavorites'
 
     export default {
         name: 'McvFeed',
@@ -63,7 +72,8 @@
             McvPagination,
             McvLoading,
             McvErrorMessage,
-            McvTagList
+            McvTagList,
+            McvAddToFavorites
         },
         props: {
             apiUrl: {
